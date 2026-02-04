@@ -1,90 +1,89 @@
 📄 Business Doc Assistant Bot
 
-Персональный Telegram-бот для анализа корпоративных документов. Бот использует технологию RAG (Retrieval-Augmented Generation), позволяя пользователям загружать документы (PDF, DOCX, TXT и др.) и получать точные ответы на вопросы, основываясь исключительно на содержании этих файлов.
-✨ Основные возможности
+A powerful Telegram bot designed to analyze corporate documents (PDF, DOCX, TXT, and more) and answer questions based strictly on their content. The bot utilizes RAG (Retrieval-Augmented Generation) to ensure accuracy and prevent AI hallucinations by grounding responses in your specific data.
+✨ Key Features
 
-    Мультиформатность: Поддержка PDF, DOCX, CSV, TXT, HTML.
+    Multi-format Support: Process PDF, DOCX, CSV, TXT, HTML, and more.
 
-    Умный поиск: Использование векторной базы данных ChromaDB для поиска наиболее релевантных фрагментов текста.
+    Intelligent Search: Uses ChromaDB (Vector Database) to find the most relevant parts of your documents instantly.
 
-    Строгий ИИ-ассистент: Настроенный системный промпт заставляет нейросеть (через OpenRouter) отвечать только по делу и только на основе предоставленного контекста.
+    Privacy-First: Context is filtered by user_id, ensuring that your documents are only accessible to you.
 
-    Изоляция данных: Поиск ответов выполняется с фильтрацией по user_id, что обеспечивает приватность ваших документов.
+    Strict AI Persona: Powered by DeepSeek (via OpenRouter), the bot follows a professional business style and refuses to invent information not found in the documents.
 
-    Деловой стиль: Лаконичные ответы в официально-деловом стиле с цитированием источников.
+    Source Citations: Every answer includes the name of the source file for verification.
 
-🛠 Технологический стек
+🛠 Tech Stack
 
-    Фреймворк бота: aiogram 3.x
+    Bot Framework: aiogram 3.x
 
     LLM Orchestration: LangChain
 
-    Векторное хранилище: ChromaDB
+    Vector Database: ChromaDB
 
     Embeddings: sentence-transformers/all-MiniLM-L6-v2 (HuggingFace)
 
-    Модель ИИ: DeepSeek-R1 (или любая другая через OpenRouter)
+    AI Model: DeepSeek-R1 via OpenRouter
 
-    База данных: Хранение векторов локально в папке ./chroma_db
-
-🚀 Быстрый старт
-1. Клонируйте репозиторий
+🚀 Quick Start
+1. Clone the repository
 code Bash
 
 git clone https://github.com/your-username/your-repo-name.git
 cd your-repo-name
 
-2. Установите зависимости
+2. Install Dependencies
 
-Рекомендуется использовать виртуальное окружение:
+It is recommended to use a virtual environment:
 code Bash
 
 python -m venv venv
-source venv/bin/activate  # Для Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
-Если файла requirements.txt нет, установите основные пакеты:
-pip install aiogram python-dotenv openai langchain langchain-community langchain-huggingface langchain-chroma pypdf docx2txt unstructured
-3. Настройте окружение
+Note: Ensure you have pypdf, docx2txt, langchain-chroma, and aiogram installed.
+3. Configuration
 
-Создайте файл .env в корневой папке проекта:
+Create a .env file in the root directory and fill in your credentials:
 code Env
 
-BOT_TOKEN=ваш_токен_от_botfather
-OPENROUTER_API_KEY=ваш_ключ_openrouter
+BOT_TOKEN=your_telegram_bot_token
+OPENROUTER_API_KEY=your_openrouter_api_key
 MODEL_NAME=deepseek/deepseek-r1:free
 
-4. Запустите бота
+4. Run the Bot
 code Bash
 
 python main.py
 
-📂 Структура проекта
+📂 Project Structure
 
-    main.py — точка входа, инициализация бота и диспетчера.
+    main.py — Entry point. Initializes the bot and dispatcher.
 
-    handlers/user_mode.py — логика обработки сообщений, загрузки файлов и ответов на вопросы.
+    handlers/user_mode.py — Main logic for file uploads and Q&A sessions.
 
-    services/vector_store.py — работа с LangChain: загрузка документов, разбиение на чанки (TextSplitter) и поиск в ChromaDB.
+    services/vector_store.py — Logic for document loading, text splitting (RecursiveCharacterTextSplitter), and ChromaDB integration.
 
-    services/llm_client.py — взаимодействие с API OpenRouter.
+    services/llm_client.py — Handles communication with the LLM via OpenRouter.
 
-    keyboards/builders.py — генерация кнопок интерфейса.
+    keyboards/builders.py — Custom Reply/Inline keyboards.
 
-    states/user_states.py — состояния FSM (Finite State Machine) для диалогов.
+    states/user_states.py — FSM (Finite State Machine) definitions.
 
-📝 Как пользоваться
+📝 How to Use
 
-    Загрузка: Нажмите кнопку "📂 Загрузить документы" и отправьте боту один или несколько файлов (например, PDF с уставом компании или DOCX с инструкцией).
+    Upload Documents: Click "📂 Загрузить документы" and send your files (e.g., a PDF contract or a TXT manual).
 
-    Индексация: Бот автоматически разделит текст на мелкие фрагменты и сохранит их в векторную базу. Нажмите "✅ Завершить загрузку".
+    Indexing: The bot splits the text into chunks and saves them into the local vector store. Click "✅ Завершить загрузку" when finished.
 
-    Вопрос: Нажмите "💬 Задать вопрос" и напишите интересующий вас запрос.
+    Ask Questions: Click "💬 Задать вопрос" and ask anything related to your files.
 
-    Результат: Бот найдет нужные абзацы в ваших документах и сформирует ответ с указанием источника (названия файла).
+    Get Answers: The bot will retrieve the relevant context and provide a concise, professional answer based only on your documents.
 
-⚠️ Ограничения
+⚠️ Important Notes
 
-    В текущей версии очистка базы данных (clear_user_memory) реализована как заглушка.
+    Local Storage: The vector database is stored locally in the ./chroma_db folder.
 
-    Обработка больших таблиц в PDF может быть неточной (зависит от структуры файла).
+    Context Window: The bot currently retrieves the top 5 most relevant text chunks to generate an answer.
+
+    Hallucination Protection: The system prompt is configured to make the bot say "I don't know" if the information is missing from the documents.
