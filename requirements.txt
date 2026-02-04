@@ -1,0 +1,10 @@
+aiogram>=3.0.0
+python-dotenv
+openai
+langchain
+langchain-community
+langchain-huggingface
+langchain-chroma     
+chromadb
+pypdf
+sentence-transformers
