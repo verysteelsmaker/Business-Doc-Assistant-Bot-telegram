@@ -29,7 +29,7 @@ A powerful Telegram bot designed to analyze corporate documents (PDF, DOCX, TXT,
 1. Clone the repository
 code Bash
 
-git clone https://github.com/your-username/your-repo-name.git
+git clone https://github.com/verysteelsmaker/Business-Doc-Assistant-Bot-telegram.git
 cd your-repo-name
 
 2. Install Dependencies
